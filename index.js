@@ -1,12 +1,20 @@
 import jsIngrow from "js-ingrow-sdk"
 import { captureMouseTouchEvents } from "./src/mouse-touch-events"
-import { capturePageEvents } from "./page-events"
-import { captureErrors } from "./errors"
-import { captureDomChanges } from "./dom-changes"
+import { capturePageEvents } from "./src/page-events"
+import { captureErrors } from "./src/errors"
+import { captureDomChanges } from "./src/dom-changes"
 import { passedSampleRate } from "./src/utils/math"
 
-export function autoGrabber(projectID, apiKey, user, grabberConfig) {
-  const ingrow = new jsIngrow(projectID, apiKey, user)
+export function autoGrabber(ingrow, grabberConfig) {
+  let ingrowInstance;
+  if (ingrow.projectID && ingrow.apiKey) {
+    const { projectID, apiKey, user } = ingrow
+    ingrowInstance = new jsIngrow(projectID, apiKey, user)
+  } else if (ingrow.sendEvent) {
+    ingrowInstance = ingrow
+  } else {
+    throw "ingrow be an instance of Ingrow class or contains ingrow sdk configs"
+  }
   const {
     touchMouseEventSampleRate = 1, 
     pageEventSampleRate = 1,

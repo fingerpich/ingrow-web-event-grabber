@@ -1,13 +1,16 @@
-import babel from 'rollup-plugin-babel';
-import babelrc from 'babelrc-rollup';
+import { getBabelOutputPlugin } from '@rollup/plugin-babel'
+import path from "path"
 
 export default {
-  input: 'src/index.js',
-  output: {
-    dir: 'output',
-    format: 'esm'
-  },
+  input: './index.js',
+  output:  [
+    // {file: './dist/bundle.cjs.js', format: 'cjs' },
+    // {file: './dist/bundle.esm.js', format: 'esm' },
+    {file: './dist/index.js', format: 'esm' }
+  ],
   plugins: [
-    babel(babelrc())
+    getBabelOutputPlugin({
+      configFile: path.resolve(__dirname, '.babelrc')
+    })
   ]
 };
