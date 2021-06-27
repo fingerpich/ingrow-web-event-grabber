@@ -6,6 +6,10 @@ import { captureDomChanges } from "./src/dom-changes"
 import { passedSampleRate } from "./src/utils/math"
 
 export function autoGrabber(ingrow, rates, middlewares = []) {
+  if (!Array.isArray(middlewares)) {
+    throw "should pass an array to the middlewares"
+  }
+
   let ingrowInstance;
   if (ingrow.projectID && ingrow.apiKey) {
     const { projectID, apiKey, userID } = ingrow
@@ -15,13 +19,6 @@ export function autoGrabber(ingrow, rates, middlewares = []) {
   } else {
     throw "ingrow be an instance of Ingrow class or contains ingrow sdk configs"
   }
-
-  const {
-    mouse = 1, 
-    page = 1,
-    error = 1,
-    domChange = 1,
-  } = rates || {}
 
   const eventsConfig = [
     { type: "mouse", stream: "events", sendDeviceInfo: false,
