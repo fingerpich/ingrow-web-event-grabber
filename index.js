@@ -5,52 +5,59 @@ import { captureErrors } from "./src/errors"
 import { captureDomChanges } from "./src/dom-changes"
 import { passedSampleRate } from "./src/utils/math"
 
-export function autoGrabber(ingrow, grabberConfig) {
+export function autoGrabber(ingrow, rates, middlewares = []) {
+  if (!Array.isArray(middlewares)) {
+    throw "should pass an array to the middlewares"
+  }
+
   let ingrowInstance;
   if (ingrow.projectID && ingrow.apiKey) {
-    const { projectID, apiKey, user } = ingrow
+    const { projectID, apiKey, userID } = ingrow
     ingrowInstance = new jsIngrow(projectID, apiKey, user)
   } else if (ingrow.sendEvent) {
     ingrowInstance = ingrow
   } else {
     throw "ingrow be an instance of Ingrow class or contains ingrow sdk configs"
   }
-  const {
-    touchMouseEventSampleRate = 1, 
-    pageEventSampleRate = 1,
-    errorSampleRate = 1,
-    domChangeSampleRate = 1,
-  } = grabberConfig
 
-  if (touchMouseEventSampleRate) {
-    captureMouseTouchEvents((eventData) => {
-      if (passedSampleRate(touchMouseEventSampleRate)) {
-        ingrow.send("events", eventData, false)
+  const eventsConfig = [
+    { type: "mouse", stream: "events", sendDeviceInfo: false,
+      capture: captureMouseTouchEvents},
+
+    { type: "page", stream: "events", sendDeviceInfo: true,
+      capture: capturePageEvents },
+
+    { type: "domChange", stream: "events", sendDeviceInfo: false,
+      capture: captureDomChanges },
+
+    { type: "error", stream: "events", sendDeviceInfo: false,
+      capture: captureErrors },
+  ]
+
+  if (rates) {
+    middlewares.push((item, next) => {
+      let rate = rates[item.type]?.rate
+      rate = rate > -1 ? rate : 1
+      if (passedSampleRate(rate)) {
+        next(item)
       }
     })
   }
 
-  if (pageEventSampleRate) {
-    capturePageEvents((eventData) => {
-      if (passedSampleRate(pageEventSampleRate)) {
-        ingrow.send("events", eventData, true)
-      }
+  middlewares.push((item, next) => {
+    ingrow.send(item.stream, item.eventData, item.sendDeviceInfo)
+  })
+
+  function callMiddleWares(middlewares, value) {
+    middlewares.length && middlewares[0](value, (newValue) => {
+      callMiddleWares(middlewares.slice(1), newValue || value)
     })
   }
 
-  if (errorSampleRate) {
-    captureErrors((eventData) => {
-      if (passedSampleRate(errorSampleRate)) {
-        ingrow.send("events", eventData, false)
-      }
+  eventsConfig.forEach((item) => {
+    item.capture((eventData) => {
+      item.eventData = eventData;
+      callMiddleWares(middlewares, eventData)
     })
-  }
-
-  if (domChangeSampleRate) {
-    captureDomChanges(() => {
-      if (passedSampleRate(domChangeSampleRate)) {
-        ingrow.send("events", eventData, false)
-      }
-    })
-  }
+  })
 }
