@@ -1,16 +1,18 @@
-import { getBabelOutputPlugin } from '@rollup/plugin-babel'
-import path from "path"
+import resolve from 'rollup-plugin-node-resolve';
+import commonJS from 'rollup-plugin-commonjs'
+import { uglify } from "rollup-plugin-uglify";
 
 export default {
   input: './index.js',
   output:  [
-    // {file: './dist/bundle.cjs.js', format: 'cjs' },
-    // {file: './dist/bundle.esm.js', format: 'esm' },
-    {file: './dist/index.js', format: 'esm' }
+    {file: './dist/bundle.min.js', name: "IngrowEventGrabber", format: 'iife' },
+    {file: './dist/index.js', format: 'cjs' }
   ],
   plugins: [
-    getBabelOutputPlugin({
-      configFile: path.resolve(__dirname, '.babelrc')
-    })
-  ]
+    resolve(),
+    commonJS({
+      include: 'node_modules/**'
+    }),
+    uglify()
+  ],
 };

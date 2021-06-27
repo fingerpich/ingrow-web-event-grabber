@@ -1,4 +1,4 @@
-import jsIngrow from "js-ingrow-sdk"
+import jsIngrow from "ingrow-js-sdk"
 import { captureMouseTouchEvents } from "./src/mouse-touch-events"
 import { capturePageEvents } from "./src/page-events"
 import { captureErrors } from "./src/errors"
