@@ -27,10 +27,11 @@
     "babel-preset-minify": "^0.5.1",
     "rollup": "^2.52.2",
     "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0"
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-uglify": "^6.0.4"
   },
   "dependencies": {
-    "ingrow-js-sdk": "^1.0.8",
-    "rollup-plugin-uglify": "^6.0.4"
+    "ingrow-js-sdk": "git+https://github.com/ingrowco/ingrow-js-sdk.git",
+    "rollup-plugin-babel": "^4.4.0"
   }
 }

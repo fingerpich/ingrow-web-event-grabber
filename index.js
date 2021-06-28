@@ -5,12 +5,13 @@ import { captureErrors } from "./src/errors"
 import { captureDomChanges } from "./src/dom-changes"
 import { passedSampleRate } from "./src/utils/math"
 
-export function autoGrabber(ingrow, rates, middlewares = []) {
+let ingrowInstance;
+
+export function startEventGrabber(ingrow, rates, middlewares = []) {
   if (middlewares && !Array.isArray(middlewares)) {
     throw "should pass an array to the middlewares"
   }
-
-  let ingrowInstance;
+  
   if (ingrow && ingrow.projectID && ingrow.apiKey) {
     const { projectID, apiKey, userID } = ingrow
     ingrowInstance = new (JsIngrow.default || JsIngrow)(projectID, apiKey, userID)
@@ -64,4 +65,10 @@ export function autoGrabber(ingrow, rates, middlewares = []) {
       callMiddleWares(middlewares, eventData)
     })
   })
+}
+
+export const Ingrow = JsIngrow
+
+export function setUser(userID) {
+  ingrowInstance.setUser(userID)
 }

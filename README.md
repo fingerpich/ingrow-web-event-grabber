@@ -1,20 +1,27 @@
-## JS SDK
-This Javascript SDK is created by [Ingrow](https://ingrow.co) to easily use the Ingrow event streaming platform automatically.
+## Ingrow Event Grabber
+This module is created by [Ingrow](https://ingrow.co) to send events automatically to Ingrow event streaming platform.
 
-## Install
+# Install and Initialize ingrow-event-grabber in an HTML file
+```HTML
+<script src="https://github.com/ingrowco/ingrow-event-grabber/blob/main/dist/index.js" />
+<script>
+    const ingrowConfig = { apiKey: "API_KEY", projectID: "PROJECT_ID", userID: "" }
+    IngrowEventGrabber.startEventGrabber(ingrowConfig)
+</script>
+```
+
+# Install and Initialize ingrow-event-grabber in front-end JavaScript projects
 
 ```sh
 yarn add ingrow-js-sdk
 ```
-
-## How To use Ingrow Event Grabber
 ```js
-import ingrowEventGrabber from "ingrow-js-event-grabber"
+import { startEventGrabber } from "ingrow-js-event-grabber"
 const ingrowConfig = { apiKey: "API_KEY", projectID: "PROJECT_ID", userID: "" }
-startIngrowEventGrabber(ingrowConfig)
+startEventGrabber(ingrowConfig)
 ```
 
-## How to use sampleRate for Events
+## How to use sampleRates for Events
 ```js
 const sampleRates = {
     mouse = 1, 
@@ -22,17 +29,16 @@ const sampleRates = {
     error = 1,
     domChange = 1,
 }
-startIngrowEventGrabber(ingrowConfig, sampleRates)
+startEventGrabber(ingrowConfig, sampleRates)
 ```
 
-## how to use autograbber alongside
-when you install `ingrow-js-event-grabber` the `ingrow-js-sdk` will be installed automatically so you can use it as the following code
+## How to use ingrowSdk manually alongside
+When you install `ingrow-js-event-grabber` the `ingrow-js-sdk` is imported in so you can use it as the following code
 
 ```js
-import Ingrow from "ingrow-js-sdk"
+import { startEventGrabber, Ingrow, setUser } from "ingrow-js-event-grabber"
 const ingrow = new Ingrow(apiKey: "API_KEY", projectID: "PROJECT_ID", user: "" )
-startIngrowEventGrabber(ingrow)
-
+startEventGrabber(ingrow)
 // and on special events
 ingrow.sendEvent("STREAM_NAME", {
     description: "paginate",
@@ -60,5 +66,5 @@ const middlewares = [
         next() 
     },
 ]
-startIngrowEventGrabber(ingrow, null, middlewares)
+startEventGrabber(ingrow, null, middlewares)
 ```
