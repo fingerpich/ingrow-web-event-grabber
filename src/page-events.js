@@ -1,14 +1,14 @@
-export function capturePageEvents(sendEvent) {
+export function capturePageEvents(publish) {
   document.addEventListener("DOMContentLoaded", () => {
-    sendEvent({ action: "load" })
+    publish({ action: "load" })
   })
   
   const wObserve = window.addEventListener
   wObserve('beforeunload', function(event) {
-    sendEvent({ action: "load" })
+    publish({ action: "load" })
   })
 
   wObserve('unload', function(event) {
-    sendEvent({ action: "load" })
+    publish({ action: "load" })
   })
 }

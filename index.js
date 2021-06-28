@@ -1,4 +1,4 @@
-import jsIngrow from "ingrow-js-sdk"
+import JsIngrow from "ingrow-js-sdk"
 import { captureMouseTouchEvents } from "./src/mouse-touch-events"
 import { capturePageEvents } from "./src/page-events"
 import { captureErrors } from "./src/errors"
@@ -6,18 +6,22 @@ import { captureDomChanges } from "./src/dom-changes"
 import { passedSampleRate } from "./src/utils/math"
 
 export function autoGrabber(ingrow, rates, middlewares = []) {
-  if (!Array.isArray(middlewares)) {
+  if (middlewares && !Array.isArray(middlewares)) {
     throw "should pass an array to the middlewares"
   }
 
   let ingrowInstance;
-  if (ingrow.projectID && ingrow.apiKey) {
+  if (ingrow && ingrow.projectID && ingrow.apiKey) {
     const { projectID, apiKey, userID } = ingrow
-    ingrowInstance = new jsIngrow(projectID, apiKey, user)
-  } else if (ingrow.sendEvent) {
+    ingrowInstance = new (JsIngrow.default || JsIngrow)(projectID, apiKey, userID)
+  } else if (ingrow?.sendEvent) {
     ingrowInstance = ingrow
   } else {
-    throw "ingrow be an instance of Ingrow class or contains ingrow sdk configs"
+    throw `autoGrabber( first parameter ingrow should be an instance of Ingrow class as following
+    ingrow = new Ingrow(apiKey: "API_KEY", projectID: "PROJECT_ID", user: "" )
+
+    or contains ingrow sdk configs like bellow
+    ingrow = { apiKey: "API_KEY", projectID: "PROJECT_ID", userID: "" }`
   }
 
   const eventsConfig = [
@@ -45,7 +49,7 @@ export function autoGrabber(ingrow, rates, middlewares = []) {
   }
 
   middlewares.push((item, next) => {
-    ingrow.send(item.stream, item.eventData, item.sendDeviceInfo)
+    ingrowInstance.sendEvent(item.stream, item.eventData, item.sendDeviceInfo)
   })
 
   function callMiddleWares(middlewares, value) {

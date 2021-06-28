@@ -1,6 +1,8 @@
 
+import { getDomPath } from "./utils/get-dom-path"
+
 function getElementMainProps(element) {
-  const path = getDomPath(element).join(" > ")
+  const path = getDomPath(element)
   const { nodeName, id, className } = element
   return { path, nodeName, id, className }
 }
@@ -12,7 +14,7 @@ function down(isTouch) {
     downProp = {isTouch, x, y , ...getElementMainProps(element)}
   }
 }
-function up(sendEvent, isTouch) {
+function up(publish, isTouch) {
   return function(event) {
     const {target: element, clientX: x, clientY: y} = event
     const dx = x - downProp.x
@@ -20,16 +22,16 @@ function up(sendEvent, isTouch) {
     const notMoved = (dx * dx + dy * dy)^.5 < 25
     const action = notMoved ? (isTouch ? 'tap' : 'click') : 'drag'
     const eventData = { isTouch, x, y , ...getElementMainProps(element), action}
-    sendEvent(eventData)
+    publish(eventData)
   }
 }
 
-export function captureMouseTouchEvents(sendEvent) {
+export function captureMouseTouchEvents(publish) {
   const observe = document.body.addEventListener
-  observe('mousedown', down(sendEvent))
-  observe('touchstart', down(sendEvent, true))
+  observe('mousedown', down(publish))
+  observe('touchstart', down(publish, true))
 
-  observe('mouseup', up(sendEvent))
-  observe('touchend', up(sendEvent, true))
+  observe('mouseup', up(publish))
+  observe('touchend', up(publish, true))
 
 }

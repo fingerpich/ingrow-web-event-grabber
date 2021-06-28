@@ -65,13 +65,13 @@ function test(event) {
 }
 
 var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+var el = document.documentElement;
 if (MutationObserver) {
     var mutationObserver = new MutationObserver(callback)
     // have the observer observe foo for changes in children
-    mutationObserver.observe( obj, { childList:true, subtree:true })
+    mutationObserver.observe( el, { childList:true, subtree:true })
 } else {
     var support = {};
-    var el = document.documentElement;
 
     //  Check for mutation events support
     if (window.addEventListener) {

@@ -1,5 +1,5 @@
-export function captureErrors(sendEvent) {
+export function captureErrors(publish) {
   window.onerror = function(error, url, line) {
-    sendEvent({error, url, line});
+    publish({error, url, line});
   };
 }
