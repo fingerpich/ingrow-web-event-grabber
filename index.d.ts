@@ -3,6 +3,10 @@ interface IngrowOptions {
   projectID: string, 
   userId?: string
 }
+interface Options {
+  sendDeviceInfo: boolean,
+  done: (err: object, response: object) => void
+}
 
 interface Rates {
   mouse?: number, 

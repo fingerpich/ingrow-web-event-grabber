@@ -14,7 +14,7 @@ export function startEventGrabber(ingrow, rates, middlewares = []) {
   
   if (ingrow && ingrow.projectID && ingrow.apiKey) {
     const { projectID, apiKey, userID } = ingrow
-    ingrowInstance = new (JsIngrow.default || JsIngrow)(projectID, apiKey, userID)
+    ingrowInstance = new (JsIngrow.default || JsIngrow)(apiKey, projectID , userID)
   } else if (ingrow?.sendEvent) {
     ingrowInstance = ingrow
   } else {

@@ -2,129 +2,104 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function unwrapExports (x) {
-	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
+function _classCallCheck(e, n) {
+  if (!(e instanceof n)) throw new TypeError("Cannot call a class as a function");
 }
 
-function createCommonjsModule(fn, module) {
-	return module = { exports: {} }, fn(module, module.exports), module.exports;
+function _defineProperties(e, n) {
+  for (var t = 0; t < n.length; t++) {
+    var o = n[t];
+    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, o.key, o);
+  }
 }
 
-var dist = createCommonjsModule(function (module, exports) {
+function _createClass(e, n, t) {
+  return n && _defineProperties(e.prototype, n), t && _defineProperties(e, t), e;
+}
 
-  Object.defineProperty(exports, "__esModule", {
-    value: !0
-  }), exports["default"] = void 0;
-
-  function _classCallCheck(a, b) {
-    if (!(a instanceof b)) throw new TypeError("Cannot call a class as a function");
+function getRandomString(e) {
+  for (var n = ""; n.length < e;) {
+    n += Math.random().toString(36).substr(2, e - n.length);
   }
 
-  function _defineProperties(a, b) {
-    for (var c, d = 0; d < b.length; d++) {
-      c = b[d], c.enumerable = c.enumerable || !1, c.configurable = !0, "value" in c && (c.writable = !0), Object.defineProperty(a, c.key, c);
+  return s;
+}
+
+function saveValue(e, n) {
+  var t;
+  window.localStorage ? window.localStorage.setItem(e, n) : ((t = new Date()).setTime(t.getTime() + 31536e7), t = "expires=" + t.toUTCString(), document.cookie = "".concat(e, "=").concat(n, "; ").concat(t));
+}
+
+function getValue(e) {
+  return window.localStorage ? window.localStorage.getItem(e) : (null === (e = document.cookie.match("(^|;)\\s*" + e + "\\s*=\\s*([^;]+)")) || void 0 === e ? void 0 : e.pop()) || "";
+}
+
+function getCreatedAnonymousId() {
+  var e = getValue("ingrow_events_anonymous_id");
+  return e || saveValue("ingrow_events_anonymous_id", e = getRandomString(32)), e;
+}
+
+function getDeviceInfo() {
+  var e = navigator.userAgent,
+      n = window.screen;
+  return {
+    userAgent: e,
+    screen: {
+      width: n.width,
+      height: n.height
     }
+  };
+}
+
+var Ingrow$1 = function () {
+  function o(e, n, t) {
+    _classCallCheck(this, o), this.apiKey = e, this.projectID = n, this.apiEndpoint = "https://event.ingrow.co", this.anonymousId = getCreatedAnonymousId(), this.ip = "autofill", this.setUserID(t);
   }
 
-  function _createClass(a, b, c) {
-    return b && _defineProperties(a.prototype, b), c && _defineProperties(a, c), a;
-  }
-
-  function getRandomString(a) {
-    for (var b = ""; b.length < a;) {
-      b += Math.random().toString(36).substr(2, a - b.length);
+  return _createClass(o, [{
+    key: "setUserID",
+    value: function value(e) {
+      this.userId = e || "";
     }
-
-    return s;
-  }
-
-  function saveValue(a, b) {
-    if (window.localStorage) window.localStorage.setItem(a, b);else {
-      var c = new Date();
-      c.setTime(c.getTime() + 31536e7); //10 years
-
-      var d = "expires=" + c.toUTCString();
-      document.cookie = "".concat(a, "=").concat(b, "; ").concat(d);
-    }
-  }
-
-  function getValue(a) {
-    if (window.localStorage) return window.localStorage.getItem(a);
-    var b;
-    return (null === (b = document.cookie.match("(^|;)\\s*" + a + "\\s*=\\s*([^;]+)")) || void 0 === b ? void 0 : b.pop()) || "";
-  }
-
-  function getCreatedAnonymousId() {
-    var a = getValue("ingrow_events_anonymous_id");
-    return a || (a = getRandomString(32), saveValue("ingrow_events_anonymous_id", a)), a;
-  }
-
-  function getDeviceInfo() {
-    var a = navigator,
-        b = a.userAgent,
-        c = window,
-        d = c.screen,
-        e = d.width,
-        f = d.height;
-    return {
-      userAgent: b,
-      screen: {
-        width: e,
-        height: f
-      }
-    };
-  }
-
-  var Ingrow = /*#__PURE__*/function () {
-    function a(b, c, d) {
-      _classCallCheck(this, a), this.apiKey = b, this.projectID = c, this.apiEndpoint = "https://event.ingrow.co", this.anonymousId = getCreatedAnonymousId(), this.ip = "autofill", this.setUserID(d);
-    }
-
-    return _createClass(a, [{
-      key: "setUserID",
-      value: function setUserID(a) {
-        this.userId = a || "";
-      }
-    }, {
-      key: "sendEvent",
-      value: function sendEvent(a, b) {
-        var c = !!(2 < arguments.length && void 0 !== arguments[2]) && arguments[2],
-            d = [],
-            e = function e(a, b) {
-          d.push({
-            name: a,
-            input: b
-          });
-        };
-
-        return e("session", {
-          anonymous_id: this.anonymousId,
-          user_id: userId
-        }), e("ip", {
-          ip: this.ip
-        }), c && e("device", getDeviceInfo()), fetch("".concat(this.apiEndpoint, "/v1"), {
-          method: "POST",
-          headers: {
-            "api-key": this.apiKey
-          },
-          body: JSON.stringify({
-            ingrow: {
-              stream: a,
-              project: this.projectID
-            },
-            enrichment: d,
-            event: b
-          })
+  }, {
+    key: "sendEvent",
+    value: function value(e, n, t) {
+      var o = t || {},
+          t = o.sendDeviceInfo,
+          i = o.done,
+          r = [],
+          o = function o(e, n) {
+        r.push({
+          name: e,
+          input: n
         });
-      }
-    }]), a;
-  }();
+      };
 
-  exports["default"] = Ingrow;
-});
-unwrapExports(dist);
+      o("session", {
+        anonymous_id: this.anonymousId,
+        user_id: this.userId
+      }), o("ip", {
+        ip: this.ip
+      }), void 0 !== t && t && o("device", getDeviceInfo());
+      var n = {
+        ingrow: {
+          stream: e,
+          project: this.projectID
+        },
+        enrichment: r,
+        event: n
+      },
+          s = new XMLHttpRequest();
+      s.open("POST", "".concat(this.apiEndpoint, "/v1")), s.setRequestHeader("api-key", this.apiKey), s.send(JSON.stringify(n)), s.onload = function () {
+        i && i(s.response);
+      }, s.onerror = function () {
+        i && i(null, s.response);
+      };
+    }
+  }]), o;
+}();
 
-var ingrowJsSdk = dist;
+var dist = Ingrow$1;
 
 function ownKeys(object, enumerableOnly) {
   var keys = Object.keys(object);
@@ -470,7 +445,7 @@ function startEventGrabber(ingrow, rates) {
     var projectID = ingrow.projectID,
         apiKey = ingrow.apiKey,
         userID = ingrow.userID;
-    ingrowInstance = new (ingrowJsSdk["default"] || ingrowJsSdk)(projectID, apiKey, userID);
+    ingrowInstance = new (dist["default"] || dist)(apiKey, projectID, userID);
   } else if (ingrow !== null && ingrow !== void 0 && ingrow.sendEvent) {
     ingrowInstance = ingrow;
   } else {
@@ -529,7 +504,7 @@ function startEventGrabber(ingrow, rates) {
     });
   });
 }
-var Ingrow = ingrowJsSdk;
+var Ingrow = dist;
 function setUser(userID) {
   ingrowInstance.setUser(userID);
 }

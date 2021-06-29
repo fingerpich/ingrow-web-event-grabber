@@ -4,7 +4,12 @@
     <script type="text/javascript" src="../dist/bundle.min.js"></script>
     <script>
       var ingrow = { apiKey: "API_KEY", projectID: "PROJECT_ID", userID: "" };
-      window.IngrowEventGrabber.autoGrabber(ingrow)
+      IngrowEventGrabber.startEventGrabber(ingrow, null, [
+        (item, next) => {
+          console.log(item)
+          next()
+        }
+      ])
     </script>    
   </body>
 </html>
