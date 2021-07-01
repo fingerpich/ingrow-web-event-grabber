@@ -14,7 +14,7 @@ export function getDomPath(el) {
         sibCount++;
       }
     }
-    if ( el.hasAttribute('id') && el.id != '' ) {
+    if ( el.hasAttribute && el.hasAttribute('id') && el.id != '' ) {
       stack.unshift(el.nodeName.toLowerCase() + '#' + el.id);
     } else if ( sibCount > 1 ) {
       stack.unshift(el.nodeName.toLowerCase() + ':eq(' + sibIndex + ')');
