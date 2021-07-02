@@ -1,31 +1,33 @@
 <html>
-  <body>
-    DEMO
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css">
+  </head>
+  <body style="background:#ff005e">
+    <div style="width: 80%; margin: auto;" id="image-slider" class="splide">
+      <div class="splide__track">
+        <ul class="splide__list">
+          <li class="splide__slide">
+            <img src="./demo/1.jpeg">
+          </li>
+          <li class="splide__slide">
+            <img src="./demo/2.jpeg">
+          </li>
+          <li class="splide__slide">
+            <img src="./demo/3.jpeg">
+          </li>
+        </ul>
+      </div>
+    </div>
     <script type="text/javascript" src="./dist/bundle.min.js"></script>
     <script>
       var ingrow = { apiKey: "API_KEY", projectID: "PROJECT_ID", userID: "" };
-      let prevEvent = null
-      let prevHtml = ""
       IngrowEventGrabber.startEventGrabber(ingrow, null, [
         (event, next) => {
           console.log(event)
-          if (!event.addedNodes || !prevEvent.addedNodes) {
-            console.log(event)
-            const p = document.createElement("p")
-            p.className = Math.random() * 365 | 0
-            p.name = Date.now()
-            const { action, ...rest } = event;
-            const h = `<b>${event.action}</b><p><small>${JSON.stringify(rest)}</small></p>`
-            if (h === prevHtml) { return }
-            prevHtml = h
-            p.innerHTML = h
-            // p.innerText = JSON.stringify(event)
-            document.body.appendChild(p)
-          }
-          prevEvent = event
-          // next()
         }
       ])
+      new Splide( '.splide' ).mount();
     </script>
   </body>
 </html>
