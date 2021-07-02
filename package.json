@@ -32,6 +32,6 @@
     "rollup-plugin-uglify": "^6.0.4"
   },
   "dependencies": {
-    "ingrow-js-sdk": "https://github.com/ingrowco/ingrow-js-sdk"
+    "ingrow-js-sdk": "^1.1.1"
   }
 }
