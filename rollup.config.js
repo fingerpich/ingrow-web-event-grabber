@@ -19,7 +19,7 @@ export default {
     resolve(),
     commonJS({include: 'node_modules/**'}),
     babel(babelConfig),
-    // uglify(),
+    uglify(),
   ],
   output: [
     {file: './dist/bundle.min.js',  name: "IngrowEventGrabber", format: 'iife'},
