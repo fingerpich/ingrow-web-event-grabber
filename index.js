@@ -49,8 +49,16 @@ export function startEventGrabber(ingrow, rates, middlewares = []) {
     })
   }
 
+  // adds some info to all events
+  middlewares.unshift((item, next) => {
+    item.pageUrl = window.location.pathname
+    next(item)
+  })
+
   middlewares.push((item, next) => {
-    ingrowInstance.sendEvent(item.stream, item.eventData, item.sendDeviceInfo)
+    ingrowInstance.sendEvent(item.stream, item.eventData, {
+      sendDeviceInfo: item.sendDeviceInfo,
+    })
   })
 
   function callMiddleWares(middlewares, value) {
