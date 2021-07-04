@@ -6,7 +6,7 @@ function down(isTouch) {
   return (event) => {
     const { x, y } = getMousePos(event);
     const { target: element } = event
-    downProp = {isTouch, x, y , ...getElementMainProps(element)}
+    downProp = {is_touch: isTouch, x, y , ...getElementMainProps(element)}
   }
 }
 function getMousePos(e) {
@@ -31,7 +31,7 @@ function up(publish, isTouch) {
     const dy = y - downProp.y
     const notMoved = ((dx * dx + dy * dy) ** .5) < 25
     const action = notMoved ? (isTouch ? 'tap' : 'click') : 'drag'
-    const eventData = { isTouch, x, y , ...getElementMainProps(element), action }
+    const eventData = { is_touch: isTouch, x, y , ...getElementMainProps(element), action }
     if (!notMoved) { eventData.from = downProp }
     publish(eventData)
   }
