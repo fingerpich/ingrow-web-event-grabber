@@ -15,6 +15,10 @@ export function captureDomChanges(publish) {
         removedNodes.push(getElementMainProps(addedItem))
       })
     })
-    publish({ addedNodes, removedNodes, action: "dom-changed" })
+    publish({ 
+      added_nodes: addedNodes, 
+      removed_nodes: removedNodes, 
+      action: "dom-changed"
+    })
   }, CheckDomChangesInterval)
 }
