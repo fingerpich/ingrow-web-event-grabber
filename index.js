@@ -51,7 +51,7 @@ export function startEventGrabber(ingrow, rates, middlewares = []) {
 
   // adds some info to all events
   middlewares.unshift((item, next) => {
-    item.pageUrl = window.location.pathname
+    item.page_url = window.location.pathname
     next(item)
   })
 
