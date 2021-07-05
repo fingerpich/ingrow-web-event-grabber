@@ -3,7 +3,7 @@ This module is created by [Ingrow](https://ingrow.co) to send events automatical
 
 # Install and Initialize ingrow-event-grabber in an HTML file
 ```HTML
-<script src="https://github.com/fingerpich/ingrow-web-event-grabber/blob/main/dist/bundle.min.js"></script>
+<script type="text/javascript"  src="https://cdn.jsdelivr.net/gh/fingerpich/ingrow-web-event-grabber@latest/dist/bundle.min.js"></script>
 <script>
     const ingrowConfig = { apiKey: "API_KEY", projectID: "PROJECT_ID", userID: "" }
     IngrowEventGrabber.startEventGrabber(ingrowConfig)
