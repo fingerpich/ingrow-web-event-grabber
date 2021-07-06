@@ -36,7 +36,7 @@ startEventGrabber(ingrowConfig, sampleRates)
 When you install `ingrow-js-event-grabber` the `ingrow-js-sdk` is imported in so you can use it as the following code
 
 ```js
-import { startEventGrabber, Ingrow, setUser } from "ingrow-js-event-grabber"
+import { startEventGrabber, Ingrow } from "ingrow-js-event-grabber"
 const ingrow = new Ingrow(apiKey: "API_KEY", projectID: "PROJECT_ID", user: "" )
 startEventGrabber(ingrow)
 // and on special events
@@ -53,18 +53,28 @@ You can use middlewares to have more control over data before they get sent as f
 ```js
 const middlewares = [
     (item, next) => {
+        // smaples event data
         if (Math.random() > .5) {
             next()
         }
     },
     (item, next) => {
+        // updates event data 
         item.date = Date.now()
         next(item) // passes the updated data to the next middlewares
     },
     (item, next) => {
+        // logs the event data before it gets sent
         console.log(item)
         next() 
     },
 ]
 startEventGrabber(ingrow, null, middlewares)
+```
+
+## How to set enrichment data in ingrow-js-event-grabber
+```js
+import { setUser, setIp } from "ingrow-js-event-grabber"
+setUser("userID") // to trace events related to specific user by adding userID when user logged in
+setIp("userIP") // we set it automatically but if you want you can change it
 ```
