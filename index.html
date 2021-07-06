@@ -8,23 +8,24 @@
       <div class="splide__track">
         <ul class="splide__list">
           <li class="splide__slide">
-            <img src="./demo/1.jpeg">
+            <img src="./1.jpeg">
           </li>
           <li class="splide__slide">
-            <img src="./demo/2.jpeg">
+            <img src="./2.jpeg">
           </li>
           <li class="splide__slide">
-            <img src="./demo/3.jpeg">
+            <img src="./3.jpeg">
           </li>
         </ul>
       </div>
     </div>
-    <script type="text/javascript" src="./dist/bundle.min.js"></script>
+    <script type="text/javascript" src="../dist/bundle.min.js"></script>
     <script>
-      var ingrow = { apiKey: "API_KEY", projectID: "PROJECT_ID", userID: "" };
+      var ingrow = { apiKey: "428dbba7455bd927bcad63896e77ff1fa1d4c297", projectID: "68", userID: "" };
       IngrowEventGrabber.startEventGrabber(ingrow, null, [
         (event, next) => {
           console.log(event)
+          next()
         }
       ])
       new Splide( '.splide' ).mount();
