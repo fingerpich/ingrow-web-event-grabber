@@ -13,7 +13,7 @@ export function startEventGrabber(ingrow, rates, middlewares = []) {
   }
   
   if (ingrow && ingrow.projectID && ingrow.apiKey) {
-    const { projectID, apiKey, userID } = ingrow
+    const { projectID, apiKey, userID = "" } = ingrow
     ingrowInstance = new (JsIngrow.default || JsIngrow)(apiKey, projectID , userID)
   } else if (ingrow?.sendEvent) {
     ingrowInstance = ingrow
@@ -79,4 +79,7 @@ export const Ingrow = JsIngrow
 
 export function setUser(userID) {
   ingrowInstance.setUser(userID)
+}
+export function setIp(ip) {
+  ingrowInstance.ip = ip
 }
