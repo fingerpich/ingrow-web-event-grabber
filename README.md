@@ -52,7 +52,11 @@ ingrow.sendEvent("STREAM_NAME", {
 You can use middlewares to have more control over data before they get sent as following
 ```js
 const middlewares = [
-    (item, next) => {
+    (item, next, eventConfig) => {
+        // prevent all domchange events to be sent
+        if (eventConfig.type === 'domChange') {
+            return
+        }
         // smaples event data
         if (Math.random() > .5) {
             next()

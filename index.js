@@ -40,37 +40,37 @@ export function startEventGrabber(ingrow, rates, middlewares = []) {
   ]
 
   if (rates) {
-    middlewares.push((item, next) => {
-      let rate = rates[item.type]?.rate
+    middlewares.push((eventData, next, eventConfig) => {
+      let rate = rates[eventConfig.type]?.rate
       rate = rate > -1 ? rate : 1
       if (passedSampleRate(rate)) {
-        next(item)
+        next()
       }
     })
   }
 
   // adds some info to all events
-  middlewares.unshift((item, next) => {
-    item.page_url = window.location.pathname
-    next(item)
+  middlewares.unshift((eventData, next) => {
+    eventData.page_url = window.location.pathname
+    next(eventData)
   })
 
-  middlewares.push((item, next) => {
-    ingrowInstance.sendEvent(item.stream, item.eventData, {
-      sendDeviceInfo: item.sendDeviceInfo,
+  middlewares.push((eventData, next, eventConfig) => {
+    ingrowInstance.sendEvent(eventConfig.stream, eventData, {
+      sendDeviceInfo: eventConfig.sendDeviceInfo,
     })
   })
 
-  function callMiddleWares(middlewares, value) {
-    middlewares.length && middlewares[0](value, (newValue) => {
-      callMiddleWares(middlewares.slice(1), newValue || value)
-    })
+  function callMiddleWares(middlewares, eventData, eventConfig) {
+    middlewares.length && middlewares[0](eventData, (newEventData) => {
+      callMiddleWares(middlewares.slice(1), newEventData || eventData, eventConfig)
+    }, eventConfig)
   }
 
-  eventsConfig.forEach((item) => {
-    item.capture((eventData) => {
-      item.eventData = eventData;
-      callMiddleWares(middlewares, eventData)
+  eventsConfig.forEach(({type, stream, sendDeviceInfo, capture}) => {
+    capture((eventData) => {
+      const eventConfig = { type, stream, sendDeviceInfo }
+      callMiddleWares(middlewares, eventData, eventConfig)
     })
   })
 }
