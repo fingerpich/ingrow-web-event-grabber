@@ -90,7 +90,7 @@ export function startEventGrabber(ingrow, rates, middlewares = []) {
 export const Ingrow = JsIngrow
 
 export function setUser(userID) {
-  ingrowInstance.setUser(userID)
+  ingrowInstance.setUserID(userID)
 }
 export function setIp(ip) {
   ingrowInstance.ip = ip

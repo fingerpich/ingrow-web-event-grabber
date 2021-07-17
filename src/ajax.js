@@ -46,6 +46,7 @@ export function captureAjaxCalls(publish) {
       const url = xhr.responseURL
       const method = urlMethod[url] || "GET"
       const status = xhr.status
+      if (url.includes("event.ingrow.co")) { return }
       if (xhr.readyState == 4 && status >= 200 && status < 300) {
         publish({ 
           action: "200Ajax", 

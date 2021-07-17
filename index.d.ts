@@ -1,14 +1,14 @@
-interface IngrowOptions {
+declare interface IngrowOptions {
   apiKey: string, 
   projectID: string, 
   userId?: string
 }
-interface Options {
+declare interface Options {
   sendDeviceInfo: boolean,
   done: (err: object, response: object) => void
 }
 
-interface Rates {
+declare interface Rates {
   mouse?: number, 
   page?: number, 
   error?: number, 
@@ -20,7 +20,12 @@ export declare class Ingrow {
   setUserID(userID: string): void;
   sendEvent(stream: string, data: object, options?: Options): void;
 }
+declare function NextMiddleware(newEventData?: Object): void
+declare function Middleware(eventData?: Object, next?: NextMiddleware): void
 
-export function startEventGrabber(ingrow: Ingrow | IngrowOptions, rates?: Rates, middleWares?: Array<function>)
+export declare function startEventGrabber(
+  ingrow: Ingrow | IngrowOptions, 
+  rates?: Rates, 
+  middleWares?: Array<Middleware>)
 
-export function setUser(userId: string)
+export declare function setUser(userId: string)
