@@ -2,7 +2,7 @@
   "name": "ingrow-event-grabber",
   "version": "1.0.0",
   "description": "Javascript module sends events to Ingrow streaming platform automatically",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "rollup -c"
   },
@@ -24,7 +24,6 @@
     "@babel/plugin-proposal-optional-chaining": "^7.14.5",
     "@babel/preset-env": "^7.14.7",
     "@rollup/plugin-babel": "^5.3.0",
-    "babel-preset-minify": "^0.5.1",
     "rollup": "^2.52.2",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-commonjs": "^10.1.0",
@@ -32,6 +31,6 @@
     "rollup-plugin-uglify": "^6.0.4"
   },
   "dependencies": {
-    "ingrow-js-sdk": "^1.1.1"
+    "ingrow-js-sdk": "^1.1.5"
   }
 }

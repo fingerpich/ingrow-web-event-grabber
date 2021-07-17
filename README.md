@@ -13,10 +13,10 @@ This module is created by [Ingrow](https://ingrow.co) to send events automatical
 # Install and Initialize ingrow-event-grabber in front-end JavaScript projects
 
 ```sh
-yarn add ingrow-js-sdk
+npm install https://github.com/fingerpich/ingrow-web-event-grabber
 ```
 ```js
-import { startEventGrabber } from "ingrow-js-event-grabber"
+import { startEventGrabber } from "ingrow-event-grabber"
 const ingrowConfig = { apiKey: "API_KEY", projectID: "PROJECT_ID", userID: "" }
 startEventGrabber(ingrowConfig)
 ```
