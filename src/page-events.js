@@ -1,11 +1,11 @@
 export function capturePageEvents(publish) {
-  document.addEventListener("DOMContentLoaded", () => {
+  const wObserve = window.addEventListener
+  wObserve("load", () => {
     publish({ action: "load" })
   }, { once: true })
   
-  const wObserve = window.addEventListener
   wObserve('beforeunload', function(event) {
-    publish({ action: "leaving" })
+    publish({ action: "leave" })
   })
 
   wObserve('unload', function(event) {

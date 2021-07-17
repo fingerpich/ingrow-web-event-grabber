@@ -3,6 +3,7 @@ import { captureMouseTouchEvents } from "./src/mouse-touch-events"
 import { capturePageEvents } from "./src/page-events"
 import { captureErrors } from "./src/errors"
 import { captureDomChanges } from "./src/dom-changes"
+import { captureAjaxCalls } from "./src/ajax"
 import { passedSampleRate } from "./src/utils/math"
 
 let ingrowInstance;
@@ -26,17 +27,20 @@ export function startEventGrabber(ingrow, rates, middlewares = []) {
   }
 
   const eventsConfig = [
+    { type: "ajax", stream: "events", sendDeviceInfo: false,
+    waitForDom: false, capture: captureAjaxCalls},
+
     { type: "mouse", stream: "events", sendDeviceInfo: false,
-      capture: captureMouseTouchEvents},
+      waitForDom: true, capture: captureMouseTouchEvents},
 
     { type: "page", stream: "events", sendDeviceInfo: true,
-      capture: capturePageEvents },
+      waitForDom: false, capture: capturePageEvents },
 
     { type: "domChange", stream: "events", sendDeviceInfo: false,
-      capture: captureDomChanges },
+      waitForDom: true, capture: captureDomChanges },
 
     { type: "error", stream: "events", sendDeviceInfo: false,
-      capture: captureErrors },
+      waitForDom: false, capture: captureErrors },
   ]
 
   if (rates) {
@@ -67,12 +71,20 @@ export function startEventGrabber(ingrow, rates, middlewares = []) {
     }, eventConfig)
   }
 
-  eventsConfig.forEach(({type, stream, sendDeviceInfo, capture}) => {
-    capture((eventData) => {
-      const eventConfig = { type, stream, sendDeviceInfo }
-      callMiddleWares(middlewares, eventData, eventConfig)
+  function startCaptures(waitForDomValue) {
+    eventsConfig.forEach(({ waitForDom, type, stream, sendDeviceInfo, capture }) => {
+      if (waitForDom === waitForDomValue) {
+        capture((eventData) => {
+          const eventConfig = { type, stream, sendDeviceInfo }
+          callMiddleWares(middlewares, eventData, eventConfig)
+        })
+      }
     })
+  }
+  window.addEventListener('load', function () {
+    startCaptures(true)
   })
+  startCaptures(false)
 }
 
 export const Ingrow = JsIngrow
